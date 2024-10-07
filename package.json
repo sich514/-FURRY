@@ -1,5 +1,12 @@
 {
+  "name": "furry-shop",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
   "dependencies": {
-    "@solana/web3.js": "^1.95.3"
+    "@solana/web3.js": "^1.72.0"  // Здесь указываем библиотеку
   }
 }
