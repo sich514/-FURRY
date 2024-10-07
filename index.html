@@ -17,7 +17,7 @@
         }
 
         .gif-container img {
-            width: 30%; /* Вы можете изменить этот размер под ваши нужды */
+            width: 30%; /* Размер гифки для десктопа */
             height: auto;
         }
 
@@ -25,13 +25,15 @@
             display: flex;
             justify-content: center;
             margin-top: 30px;
+            flex-wrap: wrap;
         }
 
         .product {
-            margin: 0 20px;
+            margin: 20px;
             border: 1px solid white;
             padding: 20px;
             background-color: #222;
+            flex: 1 1 200px; /* Ширина блока для десктопа, адаптируется под мобильные устройства */
         }
 
         .product img {
@@ -67,6 +69,33 @@
             margin-top: 10px;
             padding: 10px;
             width: 80%;
+        }
+
+        /* Медиазапрос для мобильных устройств */
+        @media (max-width: 768px) {
+            .gif-container img {
+                width: 60%; /* Увеличение гифки на телефоне */
+            }
+
+            .product-container {
+                flex-direction: column; /* Вертикальное отображение продуктов на мобильных устройствах */
+            }
+
+            .product {
+                margin-bottom: 20px; /* Отступ между продуктами */
+                width: 90%; /* Ширина продукта для мобильных */
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .product img {
+                width: 100px; /* Уменьшение изображения на мобильных устройствах */
+                height: 100px;
+            }
+
+            .purchase-details input {
+                width: 90%; /* Увеличение ширины поля для ввода на телефоне */
+            }
         }
     </style>
 </head>
