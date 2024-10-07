@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Furry Token Shop</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000000;
+            color: white;
+            text-align: center;
+        }
+
+        .product-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .product {
+            margin: 0 20px;
+            border: 1px solid white;
+            padding: 20px;
+            background-color: #222;
+        }
+
+        .product img {
+            width: 150px;
+            height: 150px;
+        }
+
+        .product .price {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+
+        .purchase-button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #000;
+            color: white;
+            border: 2px solid white;
+            cursor: pointer;
+        }
+
+        .purchase-button:hover {
+            background-color: white;
+            color: #000;
+        }
+
+        .purchase-details {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .purchase-details input {
+            margin-top: 10px;
+            padding: 10px;
+            width: 80%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Buy with $FURRY</h1>
+
+    <div class="product-container">
+        <div class="product">
+            <img src="product1.png" alt="Product 1">
+            <div class="price">Price: 500 $FURRY</div>
+            <button class="purchase-button" onclick="purchaseProduct(500)">Purchase me</button>
+        </div>
+        <div class="product">
+            <img src="product2.png" alt="Product 2">
+            <div class="price">Price: 1000 $FURRY</div>
+            <button class="purchase-button" onclick="purchaseProduct(1000)">Purchase me</button>
+        </div>
+        <div class="product">
+            <img src="product3.png" alt="Product 3">
+            <div class="price">Price: 1500 $FURRY</div>
+            <button class="purchase-button" onclick="purchaseProduct(1500)">Purchase me</button>
+        </div>
+    </div>
+
+    <div class="purchase-details" id="purchaseDetails">
+        <h2>New Solana Wallet Generated!</h2>
+        <div id="walletAddress"></div>
+        <p>Please send the payment and enter your Telegram username below:</p>
+        <input type="text" id="telegramUsername" placeholder="Enter your Telegram username">
+        <button onclick="submitDetails()">Submit</button>
+    </div>
+
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
+    <script>
+        async function generateSolanaWallet() {
+            const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'));
+            const wallet = solanaWeb3.Keypair.generate();
+            const walletAddress = wallet.publicKey.toString();
+            document.getElementById('walletAddress').innerText = `Wallet Address: ${walletAddress}`;
+            console.log(`Generated Wallet Address: ${walletAddress}`);
+            // You can save the private key to backend for future monitoring if needed.
+            return wallet;
+        }
+
+        async function purchaseProduct(price) {
+            // Generate a new Solana wallet
+            const wallet = await generateSolanaWallet();
+
+            // Show the payment details section
+            const purchaseDetails = document.getElementById('purchaseDetails');
+            purchaseDetails.style.display = 'block';
+        }
+
+        function submitDetails() {
+            const telegramUsername = document.getElementById('telegramUsername').value;
+            if (telegramUsername) {
+                alert(`Telegram username "${telegramUsername}" has been submitted. You will be contacted once the payment is received.`);
+                // Here, you can send the username to the backend or handle the next steps as needed.
+            } else {
+                alert('Please enter your Telegram username.');
+            }
+        }
+    </script>
+</body>
+</html>
