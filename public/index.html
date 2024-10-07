@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy $FURRY</title>
+    <style>
+        body {
+            background-color: #000;
+            text-align: center;
+            color: white;
+        }
+        .btn {
+            background-color: #000;
+            color: white;
+            border: 3px solid white;
+            padding: 10px 20px;
+            font-size: 20px;
+            cursor: pointer;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <img src="/assets/your-gif.gif" alt="FURRY" style="width:100%; max-width:400px;" id="furry-gif">
+    <button class="btn" onclick="purchaseProduct()">BUY $FURRY</button>
+
+    <div id="walletAddress"></div>
+
+    <script>
+        async function purchaseProduct() {
+            const response = await fetch('/api/generate-wallet', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+            });
+            const data = await response.json();
+            if (response.ok) {
+                document.getElementById('walletAddress').innerHTML = `Generated Wallet: ${data.publicKey}`;
+            }
+        }
+    </script>
+</body>
+</html>
