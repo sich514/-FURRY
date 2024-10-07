@@ -7,8 +7,22 @@
     <style>
         body {
             background-color: #000;
-            text-align: center;
             color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #furry-gif {
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+            width: 200px; /* Уменьшение размера гифки на десктопе */
+            object-fit: contain;
         }
         .btn {
             background-color: #000;
@@ -19,25 +33,86 @@
             cursor: pointer;
             margin: 20px;
         }
+        .products {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        .product {
+            text-align: center;
+        }
+        .product img {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            border: 2px solid white;
+        }
+        .product button {
+            background-color: #000;
+            color: white;
+            border: 2px solid white;
+            padding: 10px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <img src="/assets/furry.gif" alt="FURRY" style="width:100%; max-width:400px;" id="furry-gif">
-    <button class="btn" onclick="purchaseProduct()">BUY $FURRY</button>
+
+    <img src="/assets/furry.gif" alt="FURRY" id="furry-gif" loop>
+
+    <button class="btn">BUY $FURRY</button>
+
+    <!-- Блок с товарами -->
+    <div class="products">
+        <div class="product">
+            <img src="/assets/product1.png" alt="Product 1">
+            <p>100 $FURRY</p>
+            <button onclick="purchaseProduct(100, 'Product 1')">Purchase Me</button>
+        </div>
+        <div class="product">
+            <img src="/assets/product2.png" alt="Product 2">
+            <p>200 $FURRY</p>
+            <button onclick="purchaseProduct(200, 'Product 2')">Purchase Me</button>
+        </div>
+        <div class="product">
+            <img src="/assets/product3.png" alt="Product 3">
+            <p>300 $FURRY</p>
+            <button onclick="purchaseProduct(300, 'Product 3')">Purchase Me</button>
+        </div>
+    </div>
 
     <div id="walletAddress"></div>
 
     <script>
-        async function purchaseProduct() {
+        async function purchaseProduct(amount, productName) {
             const response = await fetch('/api/generate-wallet', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ amount, productName })
             });
             const data = await response.json();
             if (response.ok) {
-                document.getElementById('walletAddress').innerHTML = `Generated Wallet: ${data.publicKey}`;
+                const walletDiv = document.getElementById('walletAddress');
+                walletDiv.innerHTML = `
+                    <p>Generated Wallet: ${data.publicKey}</p>
+                    <p>Enter your Telegram username:</p>
+                    <input type="text" id="telegramUsername" placeholder="Your Telegram username">
+                    <button onclick="submitTelegram('${data.publicKey}')">Submit</button>
+                `;
+            }
+        }
+
+        async function submitTelegram(walletAddress) {
+            const telegramUsername = document.getElementById('telegramUsername').value;
+            if (telegramUsername) {
+                // Здесь можно добавить логику для отправки Telegram ника на сервер
+                alert(`Telegram username ${telegramUsername} for wallet ${walletAddress} submitted.`);
+            } else {
+                alert('Please enter your Telegram username.');
             }
         }
     </script>
+
 </body>
 </html>
