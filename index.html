@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Furry Token</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000000;
+            flex-direction: column;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .buy-button {
+            margin-top: 20px;
+            padding: 10px 30px;
+            background-color: #000000;
+            color: white;
+            border: 3px solid white;
+            cursor: pointer;
+            font-size: 18px;
+            text-transform: uppercase;
+        }
+
+        .buy-button:hover {
+            background-color: white;
+            color: #000000;
+        }
+
+        /* Стили для уменьшения гифки на десктопе */
+        @media (min-width: 768px) {
+            img {
+                width: 50%; /* Уменьшаем гифку на 50% на больших экранах */
+            }
+        }
+
+        /* Вертикальное выравнивание гифки и кнопки на десктопе */
+        @media (min-width: 768px) {
+            body {
+                height: 100vh;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="приколы-для-даунов-ДМБ-квадроберы-бомба-5345632 2.gif" alt="Furry Token GIF" loop>
+        <button class="buy-button">BUY $FURRY</button>
+    </div>
+</body>
+</html>
