@@ -3,116 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buy $FURRY</title>
+    <title>Furry Token Shop</title>
     <style>
         body {
-            background-color: #000;
-            color: white;
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
+            background-color: #000000;
+            color: white;
+            text-align: center;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             height: 100vh;
         }
-        #furry-gif {
-            display: block;
-            margin: 0 auto;
-            max-width: 100%;
-            width: 200px; /* Уменьшение размера гифки на десктопе */
-            object-fit: contain;
+
+        .container {
+            margin-bottom: 30px;
         }
-        .btn {
-            background-color: #000;
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .buy-button {
+            margin-top: 20px;
+            padding: 10px 30px;
+            background-color: #000000;
             color: white;
             border: 3px solid white;
-            padding: 10px 20px;
-            font-size: 20px;
             cursor: pointer;
-            margin: 20px;
+            font-size: 18px;
+            text-transform: uppercase;
         }
-        .products {
+
+        .buy-button:hover {
+            background-color: white;
+            color: #000000;
+        }
+
+        .product-container {
             display: flex;
             justify-content: center;
-            gap: 30px;
-            margin-top: 20px;
+            margin-top: 30px;
         }
+
         .product {
-            text-align: center;
+            margin: 0 20px;
+            border: 1px solid white;
+            padding: 20px;
+            background-color: #222;
         }
+
         .product img {
             width: 150px;
             height: 150px;
-            object-fit: contain;
-            border: 2px solid white;
         }
-        .product button {
+
+        .product .price {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+
+        .purchase-button {
+            margin-top: 10px;
+            padding: 10px 20px;
             background-color: #000;
             color: white;
             border: 2px solid white;
-            padding: 10px;
             cursor: pointer;
+        }
+
+        .purchase-button:hover {
+            background-color: white;
+            color: #000;
+        }
+
+        .purchase-details {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .purchase-details input {
+            margin-top: 10px;
+            padding: 10px;
+            width: 80%;
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <img src="furry.gif" alt="Furry Token GIF" loop>
+        <button class="buy-button">BUY $FURRY</button>
+    </div>
 
-    <img src="/assets/furry.gif" alt="FURRY" id="furry-gif" loop>
+    <h1>Buy with $FURRY</h1>
 
-    <button class="btn">BUY $FURRY</button>
-
-    <!-- Блок с товарами -->
-    <div class="products">
+    <div class="product-container">
         <div class="product">
-            <img src="/assets/product1.png" alt="Product 1">
-            <p>100 $FURRY</p>
-            <button onclick="purchaseProduct(100, 'Product 1')">Purchase Me</button>
+            <img src="product1.png" alt="Product 1">
+            <div class="price">Price: 500 $FURRY</div>
+            <button class="purchase-button" onclick="purchaseProduct(500)">Purchase me</button>
         </div>
         <div class="product">
-            <img src="/assets/product2.png" alt="Product 2">
-            <p>200 $FURRY</p>
-            <button onclick="purchaseProduct(200, 'Product 2')">Purchase Me</button>
+            <img src="product2.png" alt="Product 2">
+            <div class="price">Price: 1000 $FURRY</div>
+            <button class="purchase-button" onclick="purchaseProduct(1000)">Purchase me</button>
         </div>
         <div class="product">
-            <img src="/assets/product3.png" alt="Product 3">
-            <p>300 $FURRY</p>
-            <button onclick="purchaseProduct(300, 'Product 3')">Purchase Me</button>
+            <img src="product3.png" alt="Product 3">
+            <div class="price">Price: 1500 $FURRY</div>
+            <button class="purchase-button" onclick="purchaseProduct(1500)">Purchase me</button>
         </div>
     </div>
 
-    <div id="walletAddress"></div>
+    <div class="purchase-details" id="purchaseDetails">
+        <h2>New Solana Wallet Generated!</h2>
+        <div id="walletAddress"></div>
+        <p>Please send the payment and enter your Telegram username below:</p>
+        <input type="text" id="telegramUsername" placeholder="Enter your Telegram username">
+        <button onclick="submitDetails()">Submit</button>
+    </div>
 
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
     <script>
-        async function purchaseProduct(amount, productName) {
-            const response = await fetch('/api/generate-wallet', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ amount, productName })
-            });
-            const data = await response.json();
-            if (response.ok) {
-                const walletDiv = document.getElementById('walletAddress');
-                walletDiv.innerHTML = `
-                    <p>Generated Wallet: ${data.publicKey}</p>
-                    <p>Enter your Telegram username:</p>
-                    <input type="text" id="telegramUsername" placeholder="Your Telegram username">
-                    <button onclick="submitTelegram('${data.publicKey}')">Submit</button>
-                `;
+        async function generateWallet() {
+            const response = await fetch('/get-wallet');
+            if (!response.ok) {
+                alert('Failed to get wallet address');
+                return;
             }
+            const data = await response.json();
+            const walletAddress = data.publicKey;
+            document.getElementById('walletAddress').innerText = `Wallet Address: ${walletAddress}`;
+            console.log(`Generated Wallet Address: ${walletAddress}`);
+            return walletAddress;
         }
 
-        async function submitTelegram(walletAddress) {
+        async function purchaseProduct(price) {
+            // Generate a new Solana wallet
+            await generateWallet();
+
+            // Show the payment details section
+            const purchaseDetails = document.getElementById('purchaseDetails');
+            purchaseDetails.style.display = 'block';
+        }
+
+        function submitDetails() {
             const telegramUsername = document.getElementById('telegramUsername').value;
             if (telegramUsername) {
-                // Здесь можно добавить логику для отправки Telegram ника на сервер
-                alert(`Telegram username ${telegramUsername} for wallet ${walletAddress} submitted.`);
+                alert(`Telegram username "${telegramUsername}" has been submitted. You will be contacted once the payment is received.`);
             } else {
                 alert('Please enter your Telegram username.');
             }
         }
     </script>
-
 </body>
 </html>
