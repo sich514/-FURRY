@@ -150,23 +150,17 @@
         <button onclick="submitDetails()">Submit</button>
     </div>
 
-    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
     <script>
-        async function generateSolanaWallet() {
-            const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'));
-            const wallet = solanaWeb3.Keypair.generate();
-            const walletAddress = wallet.publicKey.toString();
-            document.getElementById('walletAddress').innerText = `Wallet Address: ${walletAddress}`;
-            console.log(`Generated Wallet Address: ${walletAddress}`);
-            // You can save the private key to backend for future monitoring if needed.
-            return wallet;
-        }
-
         async function purchaseProduct(price) {
-            // Generate a new Solana wallet
-            const wallet = await generateSolanaWallet();
+            // Запрашиваем кошелек с сервера
+            const response = await fetch('/api/get-wallet');
+            const data = await response.json();
+            const walletAddress = data.wallet;
 
-            // Show the payment details section
+            document.getElementById('walletAddress').innerText = `Wallet Address: ${walletAddress}`;
+            console.log(`Provided Wallet Address: ${walletAddress}`);
+
+            // Показываем секцию с деталями покупки
             const purchaseDetails = document.getElementById('purchaseDetails');
             purchaseDetails.style.display = 'block';
         }
@@ -175,7 +169,7 @@
             const telegramUsername = document.getElementById('telegramUsername').value;
             if (telegramUsername) {
                 alert(`Telegram username "${telegramUsername}" has been submitted. You will be contacted once the payment is received.`);
-                // Here, you can send the username to the backend or handle the next steps as needed.
+                // Здесь ты можешь отправить имя пользователя в backend или обработать дальнейшие действия
             } else {
                 alert('Please enter your Telegram username.');
             }
