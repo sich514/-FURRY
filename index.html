@@ -21,6 +21,7 @@
             height: auto;
         }
 
+        /* Стили для кнопки BUY $FURRY */
         .buy-button {
             margin-top: 20px;
             padding: 15px 30px;
@@ -85,13 +86,42 @@
             padding: 10px;
             width: 80%;
         }
+
+        /* Медиазапрос для мобильных устройств */
+        @media (max-width: 768px) {
+            .gif-container img {
+                width: 80%; /* Увеличение гифки на телефоне */
+            }
+
+            .product-container {
+                flex-direction: column; /* Вертикальное отображение продуктов на мобильных устройствах */
+            }
+
+            .product {
+                margin-bottom: 20px; /* Отступ между продуктами */
+                width: 70%; /* Ширина продукта для мобильных */
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .product img {
+                width: 100px; /* Уменьшение изображения на мобильных устройствах */
+                height: 100px;
+            }
+
+            .purchase-details input {
+                width: 70%; /* Увеличение ширины поля для ввода на телефоне */
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Контейнер с гифкой -->
     <div class="gif-container">
         <img src="furry.gif" alt="Furry GIF">
     </div>
 
+    <!-- Кнопка BUY $FURRY -->
     <button class="buy-button" onclick="window.open('https://your-buy-link.com', '_blank')">Buy $FURRY</button>
 
     <div class="product-container">
@@ -126,13 +156,17 @@
             const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'));
             const wallet = solanaWeb3.Keypair.generate();
             const walletAddress = wallet.publicKey.toString();
-            document.getElementById('walletAddress').innerText = `Wallet Address: ${walletAddress}`;
-            console.log(`Generated Wallet Address: ${walletAddress}`);
+            document.getElementById('walletAddress').innerText = Wallet Address: ${walletAddress};
+            console.log(Generated Wallet Address: ${walletAddress});
+            // You can save the private key to backend for future monitoring if needed.
             return wallet;
         }
 
         async function purchaseProduct(price) {
+            // Generate a new Solana wallet
             const wallet = await generateSolanaWallet();
+
+            // Show the payment details section
             const purchaseDetails = document.getElementById('purchaseDetails');
             purchaseDetails.style.display = 'block';
         }
@@ -140,7 +174,8 @@
         function submitDetails() {
             const telegramUsername = document.getElementById('telegramUsername').value;
             if (telegramUsername) {
-                alert(`Telegram username "${telegramUsername}" has been submitted. You will be contacted once the payment is received.`);
+                alert(Telegram username "${telegramUsername}" has been submitted. You will be contacted once the payment is received.);
+                // Here, you can send the username to the backend or handle the next steps as needed.
             } else {
                 alert('Please enter your Telegram username.');
             }
