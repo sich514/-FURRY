@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 
 // Путь к файлу с кошельками и файлу индекса
-const walletsFile = path.join(__dirname, '../../wallets.txt');
-const indexFile = path.join(__dirname, '../../index.txt');
+const walletsFile = path.join(__dirname, 'wallets.txt');
+const indexFile = path.join(__dirname, 'index.txt');
 
 // Читаем текущий индекс из файла (или создаем его)
 function getCurrentIndex() {
