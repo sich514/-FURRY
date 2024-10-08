@@ -1,13 +1,14 @@
 {
-  "functions": {
-    "api/**/*.js": {
-      "runtime": "nodejs18.x"
-    }
-  },
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/$1"
-    }
-  ]
+    "version": 2,
+    "functions": {
+        "api/*.js": {
+            "runtime": "nodejs16.x"  // Убедитесь, что вы используете правильную версию Node.js
+        }
+    },
+    "routes": [
+        {
+            "src": "/api/(.*)",
+            "dest": "/api/$1.js"
+        }
+    ]
 }
