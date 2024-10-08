@@ -1,18 +1,30 @@
-import fs from 'fs';
-import path from 'path';
+import { MongoClient } from 'mongodb';
 
-export default function handler(req, res) {
-    const filePath = path.resolve('./wallets.txt');
-    const wallets = fs.readFileSync(filePath, 'utf-8').split('\n').filter(Boolean);
+const uri = 'mongodb+srv://slavikobmen2022:rxIPD54HL8j00jTj@wallets.tn8px.mongodb.net/?retryWrites=true&w=majority&appName=wallets'; // Замените на вашу строку подключения
+const client = new MongoClient(uri);
 
-    if (wallets.length === 0) {
-        return res.status(500).json({ error: 'No wallets available' });
+export default async function handler(req, res) {
+    try {
+        // Подключение к базе данных
+        await client.connect();
+        const database = client.db('wallets');
+        const collection = database.collection('addresses');
+
+        // Получаем первый адрес кошелька
+        const wallet = await collection.findOne({}); // Вы можете изменить запрос в зависимости от структуры данных
+
+        if (!wallet) {
+            return res.status(404).json({ error: 'No wallets available' });
+        }
+
+        // Возвращаем адрес кошелька
+        res.status(200).json({ address: wallet.address });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to connect to the database' });
+    } finally {
+        // Закрываем соединение
+        await client.close();
     }
-
-    const walletAddress = wallets.shift(); // Берем первый адрес из списка
-
-    // Перезаписываем файл с оставшимися адресами
-    fs.writeFileSync(filePath, wallets.join('\n'));
-
-    res.status(200).json({ wallet: walletAddress });
 }
