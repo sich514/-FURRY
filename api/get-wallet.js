@@ -1,30 +1,25 @@
-import { MongoClient } from 'mongodb';
+const { MongoClient } = require('mongodb');
 
-const uri = 'mongodb+srv://slavikobmen2022:rxIPD54HL8j00jTj@wallets.tn8px.mongodb.net/?retryWrites=true&w=majority&appName=wallets'; // Замените на вашу строку подключения
-const client = new MongoClient(uri);
+const uri = process.env.MONGODB_URI; // Получение URI из переменных окружения
 
-export default async function handler(req, res) {
-    try {
-        // Подключение к базе данных
-        await client.connect();
-        const database = client.db('wallets');
-        const collection = database.collection('addresses');
+module.exports = async (req, res) => {
+    if (req.method === 'GET') {
+        try {
+            const client = new MongoClient(uri);
+            await client.connect();
+            const database = client.db('wallets'); // Замените на имя вашей базы данных
+            const collection = database.collection('wallets');
 
-        // Получаем первый адрес кошелька
-        const wallet = await collection.findOne({}); // Вы можете изменить запрос в зависимости от структуры данных
-
-        if (!wallet) {
-            return res.status(404).json({ error: 'No wallets available' });
+            const wallets = await collection.find({}).toArray(); // Получаем все кошельки
+            res.status(200).json(wallets);
+        } catch (error) {
+            console.error('Error fetching wallets:', error);
+            res.status(500).json({ error: 'Failed to fetch wallets' });
+        } finally {
+            await client.close();
         }
-
-        // Возвращаем адрес кошелька
-        res.status(200).json({ address: wallet.address });
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Failed to connect to the database' });
-    } finally {
-        // Закрываем соединение
-        await client.close();
+    } else {
+        res.setHeader('Allow', ['GET']);
+        res.status(405).end(`Method ${req.method} Not Allowed`);
     }
-}
+};
