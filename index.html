@@ -21,6 +21,22 @@
             height: auto;
         }
 
+        /* Стили для кнопки BUY $FURRY */
+        .buy-button {
+            margin-top: 20px;
+            padding: 15px 30px;
+            background-color: #ffcc00;
+            color: black;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .buy-button:hover {
+            background-color: #e6b800;
+        }
+
         .product-container {
             display: flex;
             justify-content: center;
@@ -106,6 +122,9 @@
     <div class="gif-container">
         <img src="furry.gif" alt="Furry GIF">
     </div>
+
+    <!-- Кнопка BUY $FURRY -->
+    <button class="buy-button" onclick="window.open('https://your-buy-link.com', '_blank')">Buy $FURRY</button>
 
     <div class="product-container">
         <div class="product">
