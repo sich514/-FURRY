@@ -17,11 +17,10 @@
         }
 
         .gif-container img {
-            width: 30%; /* Размер гифки для десктопа */
+            width: 30%;
             height: auto;
         }
 
-        /* Стили для кнопки BUY $FURRY */
         .buy-button {
             margin-top: 20px;
             padding: 15px 30px;
@@ -49,7 +48,7 @@
             border: 1px solid white;
             padding: 20px;
             background-color: #222;
-            flex: 1 1 200px; /* Ширина блока для десктопа, адаптируется под мобильные устройства */
+            flex: 1 1 200px;
         }
 
         .product img {
@@ -87,56 +86,53 @@
             width: 80%;
         }
 
-        /* Медиазапрос для мобильных устройств */
         @media (max-width: 768px) {
             .gif-container img {
-                width: 80%; /* Увеличение гифки на телефоне */
+                width: 80%;
             }
 
             .product-container {
-                flex-direction: column; /* Вертикальное отображение продуктов на мобильных устройствах */
+                flex-direction: column;
             }
 
             .product {
-                margin-bottom: 20px; /* Отступ между продуктами */
-                width: 70%; /* Ширина продукта для мобильных */
+                margin-bottom: 20px;
+                width: 70%;
                 margin-left: auto;
                 margin-right: auto;
             }
 
             .product img {
-                width: 100px; /* Уменьшение изображения на мобильных устройствах */
+                width: 100px;
                 height: 100px;
             }
 
             .purchase-details input {
-                width: 70%; /* Увеличение ширины поля для ввода на телефоне */
+                width: 70%;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Контейнер с гифкой -->
     <div class="gif-container">
-        <img src="public/assets/furry.gif" alt="Furry GIF">
+        <img src="/furry.gif" alt="Furry GIF">
     </div>
 
-    <!-- Кнопка BUY $FURRY -->
     <button class="buy-button" onclick="window.open('https://your-buy-link.com', '_blank')">Buy $FURRY</button>
 
     <div class="product-container">
         <div class="product">
-            <img src="public/assets/product1.png" alt="Product 1">
+            <img src="/product1.png" alt="Product 1">
             <div class="price">Price: 300,000 $FURRY</div>
             <button class="purchase-button" onclick="purchaseProduct(500)">Purchase me</button>
         </div>
         <div class="product">
-            <img src="public/assets/product2.png" alt="Product 2">
+            <img src="/product2.png" alt="Product 2">
             <div class="price">Price: 300,000 $FURRY</div>
             <button class="purchase-button" onclick="purchaseProduct(1000)">Purchase me</button>
         </div>
         <div class="product">
-            <img src="public/assets/product3.png" alt="Product 3">
+            <img src="/product3.png" alt="Product 3">
             <div class="price">Price: 500,000 $FURRY</div>
             <button class="purchase-button" onclick="purchaseProduct(1500)">Purchase me</button>
         </div>
@@ -152,24 +148,27 @@
 
     <script>
         async function purchaseProduct(price) {
-            // Запрашиваем кошелек с сервера
-            const response = await fetch('/api/get-wallet');
-            const data = await response.json();
-            const walletAddress = data.wallet;
+            try {
+                const response = await fetch('/api/get-wallet');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch wallet address');
+                }
+                const data = await response.json();
+                const walletAddress = data.wallet;
 
-            document.getElementById('walletAddress').innerText = `Wallet Address: ${walletAddress}`;
-            console.log(`Provided Wallet Address: ${walletAddress}`);
-
-            // Показываем секцию с деталями покупки
-            const purchaseDetails = document.getElementById('purchaseDetails');
-            purchaseDetails.style.display = 'block';
+                document.getElementById('walletAddress').innerText = `Wallet Address: ${walletAddress}`;
+                const purchaseDetails = document.getElementById('purchaseDetails');
+                purchaseDetails.style.display = 'block';
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while trying to fetch the wallet address.');
+            }
         }
 
         function submitDetails() {
             const telegramUsername = document.getElementById('telegramUsername').value;
             if (telegramUsername) {
                 alert(`Telegram username "${telegramUsername}" has been submitted. You will be contacted once the payment is received.`);
-                // Здесь ты можешь отправить имя пользователя в backend или обработать дальнейшие действия
             } else {
                 alert('Please enter your Telegram username.');
             }
