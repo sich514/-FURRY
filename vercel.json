@@ -2,13 +2,7 @@
     "version": 2,
     "functions": {
         "api/*.js": {
-            "runtime": "nodejs16.x"
+            "runtime": "nodejs16.x"  // Убедитесь, что вы используете правильную версию Node.js
         }
-    },
-    "routes": [
-        {
-            "src": "/api/(.*)",
-            "dest": "/api/$1.js"
-        }
-    ]
+    }
 }
